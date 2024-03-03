@@ -1,5 +1,6 @@
 <?php
 
+use Alura\Doctrine\Entity\Phone;
 use Alura\Doctrine\Entity\Student;
 use Alura\Doctrine\Helper\EntityManagerCreator;
 
@@ -9,15 +10,18 @@ $entityManager = EntityManagerCreator::createEntityManager();
 $studentRepository = $entityManager->getRepository(Student::class);
 
 /** @var Student[] $studentList */
-// $studentList = $studentRepository->findAll();
-// foreach($studentList as $student) {
-  
-//   echo "Id:  $student->id\n Nome: $student->name \n\n"; 
-// }
+$studentList = $studentRepository->findAll();
 
-// $student = $studentRepository->findBy([
-//     'name' => 'Iago Sousa'
-// ]);
-$student = $studentRepository->findAll();
-var_dump($student);
-// echo $studentRepository->count();
+foreach($studentList as $student) {
+  echo "Id:  $student->id\n Nome: $student->name \n\n"; 
+  echo "Telefones:\n";
+
+  echo implode(', ', 
+  $student->phones()
+  ->map(fn (Phone $phone) => $phone->number)->toArray());
+  echo PHP_EOL . "\n";
+  
+}
+
+// $student = $studentRepository->findAll();
+echo $studentRepository->count([]) . PHP_EOL;
